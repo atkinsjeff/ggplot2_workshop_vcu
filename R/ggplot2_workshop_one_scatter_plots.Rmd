@@ -1,0 +1,287 @@
+---
+title: "An Introduction to ggplot2 Part One:  Scatterplots"
+author: "Jeff Atkins"
+date: "October 24, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## An Introduction to ggplot2
+Presenting your data clearly is a paramount concern.And while making data look bad is easy, making it look good can be too! One way to do this is with ggplot2. 
+
+#### Learning goals
+* Understand basic graphic design principles and be able to apply them to R data graphics 
+* Increase knowledge of R graphics capabilities using the ggplot2 packagge and improve the effectiveness of your data graphics and decrease the amount of time you spend plotting and replotting your data 
+* Be able to create reproducible, publication quality graphics to journal specifications using ggplot2 and R
+
+#### Prerequisites
+Students should be familiar with loading data into RStudio, different types of data objects (vectors, matrices, data frames, lists, etc.), installing and loading packages, and calling functions. You should also be able to use consistent style in your code. If you need a refresher, please review these tutorials:
+* [Install R and RStudio](https://beckmw.files.wordpress.com/2014/09/r_install_guide.pdf)
+* [R Data structures](http://adv-r.had.co.nz/Data-structures.html)
+* [Functions](http://adv-r.had.co.nz/Functions.html)
+* [R style guide](http://adv-r.had.co.nz/Style.html)
+
+
+Begin by Initating ggplot2
+
+```{r require-ggplot2, echo = FALSE, message = FALSE}
+require(ggplot2)
+```
+
+## Scatterplots
+```{r scatter-plot}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length))+
+  geom_point()
+```
+
+OK, this is a start. But honestly, we can do better than this. Let's start by fixing the labels.
+
+```{r scatter-plot2}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length))+
+  geom_point()+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")
+```
+
+That is looking better. But what if we wanted to change the shape and size of the points? 
+
+```{r scatter-plot3}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length))+
+  geom_point(shape = 21, size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")
+```
+
+----
+What are all the shapes you can use?
+
+![](images/ggplot2-shape-identity.PNG)
+
+```{r scatter-plot4}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length))+
+  geom_point(size = 2, color = "dodgerblue")+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")
+```
+
+OK, but when we look at this plot, we can clearly see that there is something up here, right?
+
+Let's look at our data a bit:
+
+```{r data-look}
+head(iris)
+str(iris)
+```
+
+We can see that there is a species column with three factor levels (i.e. three different species). We can handle this in ggplot2 in (at least) two different ways. First, we can adjust by color by adding `color = Species` in the `aes()` section. It is important that we don't recall a color command in the `geom_point()` line:
+
+```{r scatter-plot5}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")
+```
+
+Say color is an issue and you need to reproduce this plot in black and white. You can then use a `shape = Species` call in the `aes()` line:
+
+
+```{r scatter-plot6}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, shape = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")
+```
+
+At this point, you may be saying to yourself, "I am not a fan of the grey checkboard background. ggplot2 comes with a set of "themes" that can be employed that will fit the bill--with many of these themes targeted specifically towards different disciplines. 
+
+```{r bw_no_eval, eval = FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_bw()
+```
+
+## `theme_bw()`
+```{r bw, echo =  FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_bw()
+```
+
+## `theme_classic()`
+```{r classic, echo =  FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_classic()
+```
+
+## `theme_dark()`
+```{r dark, echo =  FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_dark()
+```
+
+## `theme_minimal()`
+```{r minimal, echo =  FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_minimal()
+```
+
+## `theme_linedraw()`
+```{r linedraw, echo =  FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 2)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_linedraw()
+```
+
+There are also some pretty excellent and nutty themes in the [ggthemes package](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html)
+
+&nbsp;
+
+&nbsp;
+
+#### Changing Fonts, Labels, and Text
+
+Using `theme()` we can highly customize a plot by changing font size, color, etc.
+
+```{r scatter-plot7}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 4)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme(axis.title.x = element_text(size = 16, color = "red"),
+        axis.title.y = element_text(size = 12, color = "blue"),
+        axis.text = element_text(size = 12, color = 'black'))
+```
+
+You can also remove the gridlines and axis ticks if ya want, too.
+
+```{r scatter-plot8}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species))+
+  geom_point(size = 4)+
+  xlab("Sepal Length (cm)")+
+  ylab("Petal Length (cm)")+
+  theme(axis.title = element_text(size = 16, color = "black"),
+        axis.text = element_text(size = 12, color = 'black'),
+        panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank(),
+        axis.ticks = element_blank())
+```
+
+&nbsp;
+
+&nbsp;
+
+#### Adding Lines
+A good look at the iris data set is going to want to make you run some statistics--and honestly, that's part of what you'd want to do with some real data anyway. Here are two examples. Notice the difference:
+
+```{r two-plots, echo = FALSE}
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length, color = Species))+
+  geom_point(size = 4, alpha = 0.5)+
+  xlab("Petal Width (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_classic()+
+  theme(legend.justification=c(1,0), legend.position=c(1,0))+
+  geom_smooth(method = "lm", se = FALSE)
+
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length))+
+  geom_point(size = 4, alpha = 0.5)+
+  xlab("Petal Width (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_classic()+
+  theme(legend.justification=c(1,0), legend.position=c(1,0))+
+  geom_smooth(method = "lm", se = FALSE)
+  
+```
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+
+Let's look at the code:
+
+```{r two-plots2, eval = FALSE}
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length, color = Species))+
+  geom_point(size = 4, alpha = 0.5)+
+  xlab("Petal Width (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_classic()+
+  theme(legend.justification=c(1,0), legend.position=c(1,0))+
+  geom_smooth(method = "lm", se = FALSE)
+
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length))+
+  geom_point(size = 4, alpha = 0.5)+
+  xlab("Petal Width (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_classic()+
+  theme(legend.justification=c(1,0), legend.position=c(1,0))+
+  geom_smooth(method = "lm", se = FALSE)
+  
+```
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+#### Challenge!
+
+I want you to reproduce the following plot and remember to consult `?geom_point()`:
+
+
+```{r challenge, echo =  FALSE}
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length, color = Species))+
+  geom_point(size = 4, alpha = 0.5)+
+  xlab("Petal Width (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_bw()+
+  theme(axis.title = element_text(size = 14, color = "black"),
+        axis.text = element_text(size = 12, color = 'black'),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.ticks = element_blank())
+  
+```
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+
+```{r challenge-answer, eval =  FALSE}
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length, color = Species))+
+  geom_point(size = 4, alpha = 0.5)+
+  xlab("Petal Width (cm)")+
+  ylab("Petal Length (cm)")+
+  theme_bw()+
+  theme(axis.title = element_text(size = 14, color = "black"),
+        axis.text = element_text(size = 12, color = 'black'),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.ticks = element_blank())
+  
+```
